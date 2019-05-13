@@ -11,6 +11,8 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-4.2.xsd">
     <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+    <mvc:resources mapping="/images/**" location="/images/"/>
     <!--指定需要扫描的包-->
     <context:component-scan
             base-package="com.j2ee.controller" />
@@ -27,6 +29,14 @@
                 <value>text/json;charset=UTF-8</value>
             </list>
         </property>
+    </bean>
+    <!--上传文件-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <!-- 最大内存大小 -->
+        <property name="maxInMemorySize" value="102400000"/>
+        <!-- 最大文件大小，-1为不限制大小 -->
+        <property name="maxUploadSize" value="20480000"/>
     </bean>
 </beans>
 

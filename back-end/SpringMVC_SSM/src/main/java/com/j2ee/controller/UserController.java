@@ -1,14 +1,18 @@
 package com.j2ee.controller;
 
+import com.auth0.jwt.interfaces.Claim;
+import com.j2ee.mapper.UserMapper;
 import com.j2ee.po.User;
 import com.j2ee.service.UserService;
-import com.j2ee.util.JwtUtil;
-import com.sun.javafx.collections.MappingChange;
+import com.j2ee.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,56 +20,45 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public Map login( @RequestBody User user) throws Exception {
+    public Map login(@RequestBody User user) throws Exception {
+        ApplicationContext applicationContext=new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserMapper userMapper=applicationContext.getBean(UserMapper.class);
         Map<String,Object> map = new HashMap<String,Object>();
-
-//        System.out.println(user.getPwd());
-//        System.out.println(user.getUserID());
-        User user1 = userService.findUserByID(user.getUserID());
-        if(user1 == null){
+        User user1=userMapper.findUserByID(user.getUserID());
+        String pwd=MD5.getHash(user.getPwd());
+        if(user1 == null||!pwd.equals(user1.getPwd())){
             map.put("code", -1);
         }
-        else if(!user1.getPwd().equals(user.getPwd())){
-            map.put("code", 0);
-        }
         else {
-            map.put("code", 1);
-            map.put("token",JwtUtil.createToken(user.getUserID()));
+            map.put("code", 0);
+            map.put("token", JwtUtil.createToken(user.getUserID()));
             map.put("name",user1.getName());
         }
         return map;
     }
-    
+
+    @RequestMapping(value = "/changePwd",method = RequestMethod.POST)
+    @ResponseBody
+    public Map changePwd(@RequestBody(required = true) Map<String,Object> map){
+        ApplicationContext applicationContext=new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserMapper userMapper=applicationContext.getBean(UserMapper.class);
+        String token = (String) map.get("token");
+        Map<String, Claim> a = JwtUtil.verifyToken(token);
+        String userID = JwtUtil.getAppUID(token);
+        User user=userMapper.findUserByID(userID);
+        Map<String,Object> map1=new HashMap<>();
+        String newpwd=MD5.getHash((String)map.get("newpwd"));
+        String pwd=MD5.getHash((String)map.get("pwd"));
+        if(newpwd==null||newpwd.length()==0||!pwd.equals(user.getPwd())){
+            map1.put("code",-1);
+        }
+        else{
+            user.setPwd(newpwd);
+            userMapper.updateUserPwd(user);
+            map1.put("code",0);
+        }
+        return map1;
+    }
 }
-
-//    public Map login(HttpServletRequest request){
-//        String userID = request.getParameter("userID");
-//        String password = request.getParameter("password");
-//        Map<String,Object> map = new HashMap<String,Object>();
-//        System.out.println(userID);
-//        System.out.println(password);
-//        map.put("userID", userID);
-//        map.put("password",password);
-//        System.out.println(map);
-//        return map;
-//    }
-
-//    public Map login(String userID, String password){
-//        Map<String,Object> map = new HashMap<String,Object>();
-//        User user = userService.findUserByID(userID);
-//        if(user == null){
-//            map.put("code", -1);
-//        }
-//        else if(!user.getPwd().equals(password)){
-//            map.put("code", 0);
-//        }
-//        else {
-//            map.put("code", 1);
-//            map.put("token", "1231231231");
-//        }
-//        return map;
-//    }

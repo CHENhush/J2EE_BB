@@ -4,6 +4,15 @@ public class Star_answer {
 	private int answerID;
 	private String userID;
 	private int starTime;
+	private Answer answer;
+
+	public Answer getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(Answer answer) {
+		this.answer = answer;
+	}
 
 	public int getAnswerID() {
 		return answerID;

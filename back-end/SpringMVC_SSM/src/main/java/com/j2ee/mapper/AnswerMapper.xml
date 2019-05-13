@@ -22,10 +22,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteAnswer" parameterType="int">
 		delete from answer where answerID=#{answerID}
 	</delete>
-	
-	<update id="updateStar" parameterType="com.j2ee.po.Answer">
-		update answer 
-		set star=star+#{star}
+
+	<update id="addStar" parameterType="int">
+		update answer
+		set	star=star+1
+		where answerID=#{answerID}
+	</update>
+	<update id="deleteStar" parameterType="int">
+		update answer
+		set	star=star-1
 		where answerID=#{answerID}
 	</update>
 </mapper>

@@ -12,9 +12,13 @@ public interface QuestionService {
 	//查找用户的问题
 	public List<Question> findQuestionByUserID(String string);
 	//添加问题
-	public void addQuestion(Question question);
+	public int addQuestion(Question question);
 	//删除问题
 	public void deleteQuestion(int i);
-	//更新问题赞数或流量
-	public void updateStarOrPageviews(Question question);
+	//更新问题赞数
+	public void addStar(int questionID);
+	public void deleteStar(int questionID);
+
+	//更新问题浏览量
+	public void updatePageviews(int questionID);
 }

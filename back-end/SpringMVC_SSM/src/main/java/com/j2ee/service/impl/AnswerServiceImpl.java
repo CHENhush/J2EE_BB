@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service("AnswerService")
+@Service
 @Transactional
 public class AnswerServiceImpl implements AnswerService {
     @Autowired
@@ -30,17 +30,22 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void addAnswer(Answer answer) {
-        this.answerMapper.addAnswer(answer);
+    public int addAnswer(Answer answer) {
+        int result=this.answerMapper.addAnswer(answer);
+        return  result;
     }
 
     @Override
     public void deleteAnswer(int answerID) {
         this.answerMapper.deleteAnswer(answerID);
     }
+    @Override
+    public void addStar(int answerID) {
+        this.answerMapper.addStar(answerID);
+    }
 
     @Override
-    public void updateStar(Answer answer) {
-        this.answerMapper.updateStar(answer);
+    public void deleteStar(int answerID) {
+        this.answerMapper.deleteStar(answerID);
     }
 }

@@ -10,4 +10,6 @@ public interface UserService {
     public void addUser(User user);
     //删除用户
     public void deleteUser(String userID);
+    //更新密码
+    public void updateUserPwd(User user);
 }

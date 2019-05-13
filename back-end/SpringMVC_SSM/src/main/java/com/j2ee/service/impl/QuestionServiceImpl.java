@@ -1,17 +1,18 @@
 package com.j2ee.service.impl;
 
 import com.j2ee.mapper.QuestionMapper;
+import com.j2ee.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.j2ee.po.Question;
-import com.j2ee.service.QuestionService;
+
 
 import java.util.List;
 
-@Service("QuestionService")
+@Service
 @Transactional
-public class QuestionServiceImpl implements QuestionService{
+public class QuestionServiceImpl implements QuestionService {
 	@Autowired
 	private QuestionMapper questionMapper;
 
@@ -40,9 +41,9 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 
 	@Override
-	public void addQuestion(Question question) {
-
-		this.questionMapper.addQuestion(question);
+	public int addQuestion(Question question) {
+		int result=this.questionMapper.addQuestion(question);
+		return result;
 	}
 
 	@Override
@@ -51,8 +52,19 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 
 	@Override
-	public void updateStarOrPageviews(Question question) {
-		this.questionMapper.updateStarOrPageviews(question);
+	public void addStar(int questionID) {
+		this.questionMapper.addStar(questionID);
+	}
+
+	@Override
+	public void deleteStar(int questionID) {
+		this.questionMapper.deleteStar(questionID);
+	}
+
+
+	@Override
+	public void updatePageviews(int questionID){
+		this.questionMapper.updatePageviews(questionID);
 	}
 
 }

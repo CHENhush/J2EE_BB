@@ -2,17 +2,36 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.Star_answerMapper">
-	<select id="findUserStarAnswer" parameterType="String" resultType="po.Star_answer">
-		select * from star_answer where userID=#{userID}
+<mapper namespace="com.j2ee.mapper.Star_answerMapper">
+	<select id="findUserStarAnswer" resultMap="StarAnswerWithAnswer">
+		select sa.answerID as sa_answerID,sa.userID as sa_userID,sa.startime as sa_startime, a.*
+		from star_answer sa,answer a
+		where sa.answerID=a.answerID and sa.userID=#{0}
+		order by sa_startime desc limit #{1},#{2}
 	</select>
-	
-	<insert id="addAnswerStar" parameterType="po.Star_answer">
+	<resultMap id="StarAnswerWithAnswer" type="Star_answer">
+		<id property="answerID" column="sa_answerID"/>
+		<result property="userID" column="sa_userID"/>
+		<result property="starTime" column="sa_startime"/>
+		<association property="answer" javaType="Answer">
+			<id property="answerID" column="answerID"/>
+			<result property="questionID" column="questionID"/>
+			<result property="userID" column="userID"/>
+			<result property="createTime" column="createtime"/>
+			<result property="answer" column="answer"/>
+			<result property="star" column="star"/>
+		</association>
+	</resultMap>
+	<select id="starOrNot" parameterType="com.j2ee.po.Star_answer" resultType="int">
+		select count(answerID) from star_answer where answerID=#{answerID} and userID=#{userID}
+	</select>
+
+	<insert id="addAnswerStar" parameterType="com.j2ee.po.Star_answer">
 		insert into star_answer(answerID,userID,starTime)
 		values(#{answerID},#{userID},#{starTime})
 	</insert>
 	
-	<delete id="deleteAnswerStar" parameterType="po.Star_answer">
+	<delete id="deleteAnswerStar" parameterType="com.j2ee.po.Star_answer">
 		delete from star_answer where answerID=#{answerID} and userID=#{userID}
 	</delete>
 </mapper>

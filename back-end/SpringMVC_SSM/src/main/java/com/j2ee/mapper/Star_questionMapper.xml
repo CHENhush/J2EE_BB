@@ -2,17 +2,36 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.Star_questionMapper">
-	<select id="findUserStarQuestion" parameterType="String" resultType="po.Star_question">
-		select * from star_question where userID=#{userID}
+<mapper namespace="com.j2ee.mapper.Star_questionMapper">
+	<select id="findUserStarQuestion" resultMap="StarQuestionWithQuestion">
+		select sq.questionID as sq_questionID,sq.userID as sq_userID,sq.startime as sq_startime, q.*
+		from star_question sq,question q
+		where sq.questionID=q.questionID and sq.userID=#{0}
+		order by sq_startime desc limit #{1},#{2}
 	</select>
-	
-	<insert id="addQuestionStar" parameterType="po.Star_question">
+	<resultMap id="StarQuestionWithQuestion" type="Star_question">
+		<id property="questionID" column="sq_questionID"/>
+		<result property="userID" column="sq_userID"/>
+		<result property="starTime" column="sq_startime"/>
+		<association property="question" javaType="Question">
+			<id property="questionID" column="questionID"/>
+			<result property="userID" column="userID"/>
+			<result property="createTime" column="createtime"/>
+			<result property="question" column="question"/>
+			<result property="detail" column="detail"/>
+			<result property="star" column="star"/>
+			<result property="pageviews" column="pageviews"/>
+		</association>
+	</resultMap>
+	<select id="starOrNot" parameterType="com.j2ee.po.Star_question" resultType="int">
+		select count(questionID) from star_question where questionID=#{questionID} and userID=#{userID}
+	</select>
+	<insert id="addQuestionStar" parameterType="com.j2ee.po.Star_question">
 		insert into star_question(questionID,userID,starTime)
 		values(#{questionID},#{userID},#{starTime})
 	</insert>
 	
-	<delete id="deleteQuestionStar" parameterType="po.Star_question">
+	<delete id="deleteQuestionStar" parameterType="com.j2ee.po.Star_question">
 		delete from star_question where questionID=#{questionID} and userID=#{userID}
 	</delete>
 </mapper>
