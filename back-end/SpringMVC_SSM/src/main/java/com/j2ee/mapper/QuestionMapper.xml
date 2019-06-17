@@ -29,16 +29,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select max(questionID) from question
 	</select>
 	<select id="findAllQuestion" resultType="com.j2ee.po.Question">
-		select * from question order by questionID desc limit #{0},#{1}
+		select * from question
+		order by createtime desc
+		limit #{0},#{1}
+	</select>
+	<select id="findAllQuestionByStar" resultType="com.j2ee.po.Question">
+		select * from question
+		order by Star desc
+		limit #{0},#{1}
 	</select>
 	<select id="findQuestionByUserID" parameterType="String" resultType="com.j2ee.po.Question">
-		select * from question where userID=#{userID}
+		select * from question where userID=#{userID} order by createtime desc
 	</select>
 	<select id="findQuestionByQuestionID" parameterType="int" resultType="com.j2ee.po.Question">
 		select * from question where questionID=#{questionID}
 	</select>
 	<insert id="addQuestion" parameterType="com.j2ee.po.Question">
-		insert into question(userID,createTime,question,detail)
+		insert into question(userID,createtime,question,detail)
 		values(#{userID},#{createTime},#{question},#{detail})
 	</insert>
 	

@@ -41,13 +41,14 @@ public class PhotosController {
                 //获得文件后缀名称
                 String imageName = contentType.substring(contentType.indexOf("/") + 1);
                 System.out.println(imageName);
-                if (imageName.equals("jpg") || imageName.equals("jpeg") || imageName.equals("gif") || imageName.equals("png")
-                        || imageName.equals("bmp")) {
+                if ("jpg".equals(imageName) || "jpeg".equals(imageName) || "gif".equals(imageName) || "png".equals(imageName)
+                        || "bmp".equals(imageName)) {
                     path = uuid + "." + imageName;
                     System.out.println(path);
                     File dir = new File(pathRoot);
-                    if (!dir.exists())
+                    if (!dir.exists()){
                         dir.mkdirs();
+                    }
                     file.transferTo(new File(pathRoot + path));
                     map.put("code", 0);
                     map.put("url", path);

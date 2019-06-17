@@ -11,11 +11,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="findAnswerByUserID" parameterType="String" resultType="com.j2ee.po.Answer">
-		select * from answer where userID=#{userID}
+		select * from answer where userID=#{userID} order by createtime desc
 	</select>
 	
 	<insert id="addAnswer" parameterType="com.j2ee.po.Answer">
-		insert into answer(questionID,userID,createTime,answer)
+		insert into answer(questionID,userID,createtime,answer)
 		values(#{questionID},#{userID},#{createTime},#{answer})
 	</insert>
 	

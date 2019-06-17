@@ -3,6 +3,9 @@ package com.j2ee.po;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * @author haopan
+ */
 public class Answer {
 	private int answerID;
 	private int questionID;

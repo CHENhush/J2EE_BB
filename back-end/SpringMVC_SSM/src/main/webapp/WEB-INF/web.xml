@@ -13,6 +13,7 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
+  <!-- 针对SpringMVC的配置：中央调度器：本质上一个serlvet 配置的关于SpringmVC组件 -->
 <!--  配置前端过滤器   -->
   <servlet>
     <servlet-name>springmvc</servlet-name>
@@ -32,10 +33,6 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
-  <!--<servlet-mapping>-->
-    <!--<servlet-name>default</servlet-name>-->
-    <!--<url-pattern>resources/*</url-pattern>-->
-  <!--</servlet-mapping>-->
 
   <!-- 解决乱码的过滤器 -->
   <filter>
